@@ -4,18 +4,23 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Juanes Cardona
  */
-public class Propietario extends Persona {
+public class Propietario extends Persona implements Serializable{
 
     
     private String documento;
     private String telefono;
     private ArrayList<Mascota> mascotas;
+
+    public Propietario() {
+    }
+    
 
     public Propietario(String nombre,String documento, String telefono) {
         super(nombre);

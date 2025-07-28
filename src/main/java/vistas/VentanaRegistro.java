@@ -3,51 +3,95 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vistas;
+
 import modelo.Mascota;
 import controladores.MascotaControlador;
 import controladores.PropietarioControlador;
+import utiles.Generator;
 import dto.MascotaDTO;
 import dao.MascotaDAO;
 import dao.PropietarioDAO;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import vistas.VentanaMenu;
-/**
+import controladores.MascotaControlador;
+import dto.PropietarioDTO;
+import java.util.ArrayList;
+
+/*
  *
  * @author Juanes Cardona
  */
 public class VentanaRegistro extends javax.swing.JFrame {
-    
+
+    private VentanaMenu ventanaMenu;
+
     DefaultTableModel dtm = new DefaultTableModel();
 
-private MascotaControlador mc;
-private PropietarioControlador pc;
+    private MascotaControlador controladorMascota;
+    private PropietarioControlador controladorPropietario;
+
     /**
      * Creates new form VentanaPrincipal
      */
-    public VentanaRegistro() {
+    public VentanaRegistro(VentanaMenu ventanaMenu) {
+        this.ventanaMenu = ventanaMenu;
+        this.controladorMascota = new MascotaControlador();
+        this.controladorPropietario = new PropietarioControlador();
         initComponents();
         setLocationRelativeTo(this);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         setVisible(false);
-        String[] titulo = new String[]{"Id", "Nombre", "Especie","Edad"};
-        dtm.setColumnIdentifiers(titulo);
-        tblMascota.setModel(dtm);
+        tblMascota.setModel(new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"ID", "Nombre", "Especie", "Edad", "Documento Propietario"}
+        ));
+        
     }
+private void cargarListaMascotas() {
+    DefaultTableModel modelo = (DefaultTableModel) tblMascota.getModel();
+    modelo.setRowCount(0); // Limpiar tabla antes de cargar
+
+    ArrayList<MascotaDTO> mascotas = controladorMascota.obtenerMascotas();
+
+    for (MascotaDTO mascota : mascotas) {
+        modelo.addRow(new Object[]{
+            mascota.getId(),
+            mascota.getNombre(),
+            mascota.getEspecie(),
+            mascota.getEdad(),
+            mascota.getDocumentoProp()
+        });
+    }
+}
+private void cargarListaPropietarios() {
+    DefaultTableModel modelo = (DefaultTableModel) tablaProp.getModel();
+    modelo.setRowCount(0); // Limpiar tabla
+
+    ArrayList<PropietarioDTO> propietarios = controladorPropietario.obtenerPropietarios();
+
+    for (PropietarioDTO p : propietarios) {
+        modelo.addRow(new Object[]{
+            p.getDocumento(),
+            p.getNombre(),
+            p.getTelefono(),
+        });
+    }
+}
     
-    public void limpiarCampos(){
-    txtBusEdad.setText(null);
-    txtBusEspecie.setText(null);
-    txtBusId.setText(null);
-    txtBusNombre.setText(null);
-    txtDocumentoPro.setText(null);
-    txtEdad.setText(null);
-    txtEspecie.setText(null);
-    txtNombre.setText(null);
-    txtNombrePro.setText(null);
-    txtTelefonoPro.setText(null);
-    }
+    private void limpiarCamposPropietario() {
+    txtDocumentoPro.setText("");
+    txtNombrePro.setText("");
+    txtTelefonoPro.setText("");
+}
+private void limpiarCamposMas() {
+    txtNombre.setText("");
+    txtEspecie.setText("");
+    txtEdad.setText("");
+    txtDocuPropMAS.setText("");
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,6 +125,8 @@ private PropietarioControlador pc;
         txtEspecie = new javax.swing.JTextField();
         lblEdad = new javax.swing.JLabel();
         txtEdad = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        txtDocuPropMAS = new javax.swing.JTextField();
         panelUsuarios = new javax.swing.JPanel();
         lblBuscaMascota = new javax.swing.JLabel();
         lblIdBusc = new javax.swing.JLabel();
@@ -91,11 +137,16 @@ private PropietarioControlador pc;
         txtBusNombre = new javax.swing.JTextField();
         txtBusEspecie = new javax.swing.JTextField();
         txtBusEdad = new javax.swing.JTextField();
-        btnEliminar = new javax.swing.JButton();
+        btnActualizarMas = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMascota = new javax.swing.JTable();
+        btnEliminar1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaProp = new javax.swing.JTable();
+        btnActualizarProp = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -199,6 +250,8 @@ private PropietarioControlador pc;
 
         lblEdad.setText("Edad :");
 
+        jLabel1.setText("Documentoprop");
+
         javax.swing.GroupLayout panelRegistroLayout = new javax.swing.GroupLayout(panelRegistro);
         panelRegistro.setLayout(panelRegistroLayout);
         panelRegistroLayout.setHorizontalGroup(
@@ -210,16 +263,18 @@ private PropietarioControlador pc;
                         .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panelRegistroLayout.createSequentialGroup()
                                 .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelRegistroLayout.createSequentialGroup()
                                 .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lblEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtEdad, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                                    .addComponent(txtEspecie))))
+                                    .addComponent(txtEspecie)
+                                    .addComponent(txtDocuPropMAS))))
                         .addGap(81, 81, 81))
                     .addGroup(panelRegistroLayout.createSequentialGroup()
                         .addGap(170, 170, 170)
@@ -232,7 +287,7 @@ private PropietarioControlador pc;
         );
         panelRegistroLayout.setVerticalGroup(
             panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+            .addComponent(jSeparator2)
             .addGroup(panelRegistroLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(lblInfMascota)
@@ -240,15 +295,19 @@ private PropietarioControlador pc;
                 .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombre)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEspecie)
-                    .addComponent(txtEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblEspecie))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblEdad)
                     .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtDocuPropMAS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(61, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRegistroLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnGuardaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,12 +328,12 @@ private PropietarioControlador pc;
 
         lblBusEdad.setText("Edad :");
 
-        btnEliminar.setBackground(java.awt.Color.gray);
-        btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizarMas.setBackground(java.awt.Color.gray);
+        btnActualizarMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnActualizarMas.setText("Actualizar");
+        btnActualizarMas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
+                btnActualizarMasActionPerformed(evt);
             }
         });
 
@@ -309,6 +368,15 @@ private PropietarioControlador pc;
         ));
         jScrollPane1.setViewportView(tblMascota);
 
+        btnEliminar1.setBackground(java.awt.Color.gray);
+        btnEliminar1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnEliminar1.setText("Eliminar");
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelUsuariosLayout = new javax.swing.GroupLayout(panelUsuarios);
         panelUsuarios.setLayout(panelUsuariosLayout);
         panelUsuariosLayout.setHorizontalGroup(
@@ -317,17 +385,11 @@ private PropietarioControlador pc;
                 .addGap(6, 6, 6)
                 .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelUsuariosLayout.createSequentialGroup()
-                        .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelUsuariosLayout.createSequentialGroup()
-                                .addComponent(lblBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelUsuariosLayout.createSequentialGroup()
-                                .addComponent(lblBusEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtBusEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                        .addComponent(btnEliminar))
+                        .addComponent(lblBusEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtBusEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEliminar1))
                     .addGroup(panelUsuariosLayout.createSequentialGroup()
                         .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelUsuariosLayout.createSequentialGroup()
@@ -339,11 +401,17 @@ private PropietarioControlador pc;
                                 .addComponent(lblIdBusc, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtBusId, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                         .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(27, 27, 27)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelUsuariosLayout.createSequentialGroup()
+                        .addComponent(lblBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnActualizarMas)))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -362,20 +430,17 @@ private PropietarioControlador pc;
                     .addComponent(lblBusNombre)
                     .addComponent(txtBusNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditar))
-                .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelUsuariosLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblBusEspecie)
-                            .addComponent(txtBusEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelUsuariosLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(btnEliminar)))
-                .addGap(11, 11, 11)
+                .addGap(16, 16, 16)
+                .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBusEspecie)
+                    .addComponent(txtBusEspecie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminar1))
+                .addGap(21, 21, 21)
                 .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(110, 110, 110))
+                    .addComponent(txtBusEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnActualizarMas))
+                .addGap(108, 108, 108))
             .addGroup(panelUsuariosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -383,6 +448,53 @@ private PropietarioControlador pc;
         );
 
         tbbPanelUsuario.addTab("Usuarios", panelUsuarios);
+
+        tablaProp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaProp);
+
+        btnActualizarProp.setBackground(java.awt.Color.gray);
+        btnActualizarProp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnActualizarProp.setText("Actualizar");
+        btnActualizarProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarPropActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(316, 316, 316)
+                .addComponent(btnActualizarProp)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(btnActualizarProp)
+                .addGap(221, 221, 221))
+        );
+
+        tbbPanelUsuario.addTab("Gestion de Propietarios", jPanel2);
 
         btnMenu.setBackground(java.awt.Color.gray);
         btnMenu.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -418,7 +530,7 @@ private PropietarioControlador pc;
                 .addComponent(tbbPanelUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(btnMenu)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -434,7 +546,7 @@ private PropietarioControlador pc;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelTituloRe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -443,97 +555,106 @@ private PropietarioControlador pc;
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
-        VentanaMenu menu = new VentanaMenu(); 
-         menu.setVisible(true); 
-        
-        
+        ventanaMenu.setVisible(true);
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-         String Id = txtBusId.getText();
-    String nuevoNombre = txtBusNombre.getText();
-    String nuevaEspecie = txtBusEspecie.getText();
-    String nuevaEdad = txtBusEdad.getText(); 
-    
-    if (!Id.isBlank() && !nuevoNombre.isBlank() && !nuevaEspecie.isBlank() && !nuevaEdad.isBlank()) {
-        boolean exito = pc.editarPropietario(nuevaEspecie, nuevoNombre, nuevaEdad);
+   
         
-        if (exito) {
-            JOptionPane.showMessageDialog(this, "Datos del propietario actualizados.");
-        } else {
-            JOptionPane.showMessageDialog(this, "Propietario no encontrado para editar.");
-        }
-    } else {
-        JOptionPane.showMessageDialog(this, "Todos los campos son requeridos.");
-    }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-     String Id = txtBusId.getText();
-    
-    if (!Id.isBlank()) {
-        boolean exito = pc.eliminarPropietario(Id);
+    private void btnActualizarMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarMasActionPerformed
+cargarListaMascotas();
         
-        if (exito) {
-            JOptionPane.showMessageDialog(this, "Propietario eliminado.");
-            limpiarCampos(); // método opcional
-        } else {
-            JOptionPane.showMessageDialog(this, "No se encontró el propietario.");
-        }
-    } else {
-        JOptionPane.showMessageDialog(this, "Ingrese el documento a eliminar.");
-    }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }//GEN-LAST:event_btnActualizarMasActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-         String nombre = txtBusNombre.getText();
-    if (!nombre.equals(null)) {
-        Mascota mascota = mc.buscarMascota(nombre);
-        if (mascota != null) {
-            txtBusNombre.setText(mascota.getNombre());
-            txtBusEspecie.setText(mascota.getEspecie());
-            txtBusEdad.setText(String.valueOf(mascota.getEdad()));
-        } else {
-            JOptionPane.showMessageDialog(this, "Mascota no encontrado.");
-        }
-    }
+  
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGuardaRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardaRegistroActionPerformed
-        // TODO add your handling code here:
-        
-        String nombre = txtNombre.getText();
-        String especie = txtEspecie.getText();
-        String edad = txtEdad.getText();
+   
+          try {
+               int cantidadActual = controladorMascota.obtenerMascotas().size();
+               Generator.inicializarContadorMascota(cantidadActual);
 
-        if (nombre.isBlank() || especie.isBlank() || edad.isBlank() ) {
-            JOptionPane.showMessageDialog(this, " todos los campos deben estar llenos ");
-            return;
-        }
-       else{
-           mc.registrarMascota(dto);
-           JOptionPane.showMessageDialog(this,"Usuario registrada exitosamente");
+    // 🔁 2. Ahora sí, genera el ID (empezará desde M{cantidadActual + 1})
+              String idGenerado = Generator.generarCodigoMascota();
+              
+            String nombre = txtNombre.getText();
+            String especie = txtEspecie.getText();
+            String edad = txtEdad.getText();
+            String documento = txtDocuPropMAS.getText();
+            
 
+       if ( nombre.isEmpty() || especie.isEmpty() || edad.isEmpty() || documento.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+            PropietarioDTO exito = controladorPropietario.buscarPropietarioPorDocumento(documento);
+           
+            if (exito == null) {
+           JOptionPane.showMessageDialog(null, "No se pude registrar la mascota si no existe un Propietario.");
+           return;
+            }
+                MascotaDTO nueva = new MascotaDTO(idGenerado, nombre, especie, edad, documento);
+                boolean confirmar = controladorMascota.registrarMascota(nueva);
+                if(confirmar){
+                JOptionPane.showMessageDialog(null, "Mascota registrada correctamente.");
+                cargarListaMascotas();
+                }else{
+                
+                JOptionPane.showMessageDialog(null, "No se pudo registrar la mascota.");
+                }
+         
+        }catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+
     }//GEN-LAST:event_btnGuardaRegistroActionPerformed
 
     private void btnGuardaRegistro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardaRegistro1ActionPerformed
-        // TODO add your handling code here:
-        String nombrePro = txtNombrePro.getText();
-        String documento = txtDocumentoPro.getText();
-        String telefono = txtTelefonoPro.getText();
-        if (nombrePro.isBlank() || documento.isBlank() || telefono.isBlank() ){
-            JOptionPane.showMessageDialog(this, " todos los campos deben estar llenos ");
+
+    try {
+        String documento = txtDocumentoPro.getText().trim();
+        String nombre = txtNombrePro.getText().trim();
+        String telefono = txtTelefonoPro.getText().trim();
+
+        if (documento.isEmpty() || nombre.isEmpty() || telefono.isEmpty() ) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        else{
-         pc.registrarPropietario(nombrePro, documento, telefono );
-            JOptionPane.showMessageDialog(this,"Usuario registrada exitosamente");   
-        }        
+
+        PropietarioDTO nuevo = new PropietarioDTO(documento, telefono, nombre);
+        boolean exito = controladorPropietario.registrarPropietario(nuevo);
+
+        if (exito) {    
+            JOptionPane.showMessageDialog(this, "Propietario registrado correctamente.");
+            limpiarCamposPropietario();
+            cargarListaPropietarios() ;
+          //  cargarListaPropietarios(); // si tienes una tabla de propietarios
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo registrar el propietario.");
+        }
+
+    } catch (IllegalArgumentException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+      
     }//GEN-LAST:event_btnGuardaRegistro1ActionPerformed
+
+    private void btnActualizarPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarPropActionPerformed
+cargarListaPropietarios();
+    }//GEN-LAST:event_btnActualizarPropActionPerformed
+
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -566,20 +687,25 @@ private PropietarioControlador pc;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaRegistro().setVisible(true);
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarMas;
+    private javax.swing.JButton btnActualizarProp;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminar1;
     private javax.swing.JButton btnGuardaRegistro;
     private javax.swing.JButton btnGuardaRegistro1;
     private javax.swing.JButton btnMenu;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblBusEdad;
     private javax.swing.JLabel lblBusEspecie;
@@ -599,12 +725,14 @@ private PropietarioControlador pc;
     private javax.swing.JPanel panelTituloRe;
     private javax.swing.JPanel panelUsuarios;
     private javax.swing.JSeparator sprTitulo;
+    private javax.swing.JTable tablaProp;
     private javax.swing.JTabbedPane tbbPanelUsuario;
     private javax.swing.JTable tblMascota;
     private javax.swing.JTextField txtBusEdad;
     private javax.swing.JTextField txtBusEspecie;
     private javax.swing.JTextField txtBusId;
     private javax.swing.JTextField txtBusNombre;
+    private javax.swing.JTextField txtDocuPropMAS;
     private javax.swing.JTextField txtDocumentoPro;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEspecie;

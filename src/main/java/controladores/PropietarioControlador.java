@@ -3,63 +3,64 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controladores;
-import modelo.Mascota;
+
+import dao.PropietarioDAO;
+import dto.PropietarioDTO;
+import java.util.ArrayList;
 import modelo.Propietario;
-import dao.*;
+
 /**
- *
- * @author Juanes Cardona
+ * Juanes Cardona
  */
-
-
-
-
 public class PropietarioControlador {
 
-    private PropietarioDAO dao;
 
-    public PropietarioControlador(PropietarioDAO dao) {
-        this.dao = dao;
+    private final PropietarioDAO dao;
+
+    public PropietarioControlador() {
+        this.dao = PropietarioDAO.getInstancia();
     }
 
-    public boolean registrarPropietario(String nombre, String documento, String telefono) {
-        // Validar que los campos no estén vacíos y tengan longitud adecuada
-        if ((nombre == null || nombre.isBlank()) ||
-            (documento == null || documento.length() < 5) ||
-            (telefono == null || telefono.length() < 7)) {
+    // Registrar propietario
+    public boolean registrarPropietario(PropietarioDTO nuevo) {
+        try {
+            dao.guardarPropietario(nuevo);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Error al registrar propietario: " + ex.getMessage());
             return false;
         }
-
-        Propietario nuevo = new Propietario(nombre, documento, telefono);
-        return dao.guardarPropietario(nuevo);
     }
 
-    public Propietario buscarPropietario(String documento) {
-        // Validar que el documento no esté vacío
-        if (documento == null || documento.isBlank()) {
-            return null;
-        }
-        return dao.buscarPropietario(documento);
-    }
-
-    public boolean editarPropietario(String documentoActual, String nuevoNombre, String nuevoTelefono) {
-        // Validar datos nuevos y actuales
-        if ((documentoActual == null || documentoActual.isBlank()) ||
-            (nuevoNombre == null || nuevoNombre.isBlank()) ||
-            (nuevoTelefono == null || nuevoTelefono.length() < 7)) {
+    // Editar propietario
+    public boolean editarPropietario(String documento, PropietarioDTO propietarioActualizado) {
+        try {
+            return dao.editarPropietario(documento, propietarioActualizado);
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Error al editar propietario: " + ex.getMessage());
             return false;
         }
-
-        Propietario actualizado = new Propietario(nuevoNombre, documentoActual, nuevoTelefono);
-        return dao.editarPropietario(documentoActual, actualizado);
     }
 
+    // Eliminar propietario
     public boolean eliminarPropietario(String documento) {
-        // Validar documento antes de eliminar
-        if (documento == null || documento.isBlank()) {
+        try {
+            dao.eliminarPropietario(documento);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Error al eliminar propietario: " + ex.getMessage());
             return false;
         }
-        return dao.eliminarPropietario(documento);
+    }
+
+    // Listar todos los propietarios
+    public ArrayList<PropietarioDTO> obtenerPropietarios() {
+        return dao.listar();
+    }
+
+    // Buscar un propietario por documento
+    public PropietarioDTO buscarPropietarioPorDocumento(String documento) {
+        return dao.buscarPorDocumento(documento);
     }
 }
 

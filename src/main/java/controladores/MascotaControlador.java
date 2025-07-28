@@ -6,29 +6,76 @@ package controladores;
 
 import dao.MascotaDAO;
 import dto.MascotaDTO;
+import java.util.ArrayList;
 import modelo.Mascota;
 
 import java.util.List;
+import javax.swing.JOptionPane;
+import utiles.Generator;
 
 /**
  * Juanes Cardona
  */
 public class MascotaControlador {
 
-    private MascotaDAO dao;
+ private final MascotaDAO dao;
+
+    public MascotaControlador() {
+        this.dao = MascotaDAO.getInstancia();
+    }
+
+    // Registrar mascota
+    public boolean registrarMascota(MascotaDTO nueva) {
+        try {
+
+            dao.guardarMascots(nueva);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Error al registrar mascota: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    // Editar mascota
+    public boolean editarMascota(String idMas, MascotaDTO mascotaActualizada) {
+        try {
+            return dao.editarMascota(idMas, mascotaActualizada);
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Error al editar mascota: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    // Eliminar mascota
+    public boolean eliminarMascota(String idMas) {
+        try {
+            dao.eliminarMascota(idMas);
+            return true;
+        } catch (IllegalArgumentException ex) {
+            System.err.println("Error al eliminar mascota: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    // Listar todas las mascotas
+    public ArrayList<MascotaDTO> obtenerMascotas() {
+        return dao.listar();
+    }
+
+    // Buscar una mascota por ID
+    public MascotaDTO buscarMascotaPorId(String id) {
+        return dao.buscarPorId(id);
+    }
+    // o el método que uses
+
+}
+   /* private MascotaDAO dao;
 
     public MascotaControlador(MascotaDAO dao) {
         this.dao = dao;
     }
-
-    // Registrar mascota usando D
-   
-
-// package controlador;
-
-
-
-    public boolean guardarMascota(Mascota nueva) {
+    
+       public boolean guardarMascota(Mascota nueva) {
         try {
             if (nueva == null) return false;
             if (nueva.getId() == null || nueva.getId().isBlank()) return false;
@@ -126,7 +173,7 @@ public class MascotaControlador {
          return dao.eliminarMascota(id);
        
    }*/
-}
+
 
    
 

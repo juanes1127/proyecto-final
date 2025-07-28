@@ -4,6 +4,7 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Juanes Cardona
  */
-public class Mascota {
+public class Mascota implements Serializable{
     private String id;
     private String nombre;
     private String especie;

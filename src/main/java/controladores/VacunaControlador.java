@@ -3,57 +3,80 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controladores;
-import modelo.Vacuna;
+
 import dao.VacunaDAO;
+import modelo.Vacuna;
+
 import java.time.LocalDate;
 
 /**
- *
- * @author Juanes Cardona
+ * Juanes Cardona
  */
-
 public class VacunaControlador {
 
     private VacunaDAO dao;
 
-    // Constructor
     public VacunaControlador(VacunaDAO dao) {
         this.dao = dao;
     }
 
-    // Método para registrar vacuna
     public boolean registrarVacuna(String tipo, String lote, LocalDate fechaAplicacion, LocalDate proximaDosis) {
-        if (tipo == null || tipo.isBlank() || lote == null || lote.isBlank() || fechaAplicacion == null || proximaDosis == null) {
-            return false;
-        }
+        try {
+            if (tipo == null || tipo.isBlank()) return false;
+            if (lote == null || lote.isBlank()) return false;
+            if (fechaAplicacion == null || proximaDosis == null) return false;
 
-        Vacuna nueva = new Vacuna(tipo, lote, fechaAplicacion, proximaDosis);
-        return dao.guardarVacuna(nueva);
-    }
-
-    // Método para buscar vacuna
-    public Vacuna buscarVacuna(String tipo, String lote) {
-        if (tipo != null && lote != null && !tipo.isBlank() && !lote.isBlank()) {
-            return (Vacuna) dao.buscarVacuna(tipo, lote);
-        }
-        return null;
-    }
-
-    // Método para editar vacuna existente
-    public boolean editarVacuna(String tipo, String lote, LocalDate nuevaFecha, LocalDate nuevaProxima) {
-        if (tipo == null || lote == null || nuevaFecha == null || nuevaProxima == null) {
-            return false;
-        }
-
-        Vacuna nueva = new Vacuna(tipo, lote, nuevaFecha, nuevaProxima);
-        return dao.editarVacuna(tipo, lote, nueva);
-    }
-
-    // Método para eliminar vacuna
-    public boolean eliminarVacuna(String tipo, String lote) {
-        if (tipo != null && lote != null && !tipo.isBlank() && !lote.isBlank()) {
-            return dao.eliminarVacuna(tipo, lote);
+            Vacuna nueva = new Vacuna(tipo, lote, fechaAplicacion, proximaDosis);
+            return dao.guardarVacuna(nueva);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Argumento inválido al registrar vacuna: " + e.getMessage());
+        } catch (NullPointerException e) {
+            System.out.println("Faltan datos obligatorios al registrar vacuna.");
+        } catch (Exception e) {
+            System.out.println("Error inesperado al registrar vacuna: " + e.getMessage());
         }
         return false;
+    }
+
+    public Vacuna buscarVacuna(String tipo, String lote) {
+        try {
+            if (tipo == null || tipo.isBlank()) return null;
+            if (lote == null || lote.isBlank()) return null;
+
+            return dao.buscarVacuna(tipo, lote);
+        } catch (Exception e) {
+            System.out.println("Error al buscar vacuna: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean editarVacuna(String tipo, String lote, LocalDate nuevaFecha, LocalDate nuevaProxima) {
+        try {
+            if (tipo == null || tipo.isBlank()) return false;
+            if (lote == null || lote.isBlank()) return false;
+            if (nuevaFecha == null || nuevaProxima == null) return false;
+
+            Vacuna actualizada = new Vacuna(tipo, lote, nuevaFecha, nuevaProxima);
+            return dao.editarVacuna(tipo, lote, actualizada);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Argumento inválido al editar vacuna: " + e.getMessage());
+        } catch (NullPointerException e) {
+            System.out.println("Faltan datos obligatorios al editar vacuna.");
+        } catch (Exception e) {
+            System.out.println("Error inesperado al editar vacuna: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean eliminarVacuna(String tipo, String lote) {
+        try {
+            if (tipo == null || tipo.isBlank()) return false;
+            if (lote == null || lote.isBlank()) return false;
+
+            return dao.eliminarVacuna(tipo, lote);
+        } catch (Exception e) {
+            System.out.println("Error al eliminar vacuna: " + e.getMessage());
+            return false;
+        }
     }
 }

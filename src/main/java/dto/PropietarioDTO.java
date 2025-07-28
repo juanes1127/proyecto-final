@@ -4,6 +4,7 @@
  */
 package dto;
 
+import java.io.Serializable;
 import modelo.Mascota;
 import java.util.ArrayList;
 import modelo.Persona;
@@ -12,16 +13,20 @@ import modelo.Persona;
  *
  * @author Juanes Cardona
  */
-public class PropietarioDTO extends Persona{
+public class PropietarioDTO extends Persona implements Serializable{
     private String documento;
     private String telefono;
     private ArrayList<Mascota> mascotas;
 
-    public PropietarioDTO(String documento, String telefono, ArrayList<Mascota> mascotas, String nombre) {
+    public PropietarioDTO() {
+    }
+
+    public PropietarioDTO(String documento, String telefono, String nombre) {
         super(nombre);
         this.documento = documento;
         this.telefono = telefono;
         this.mascotas = mascotas;
+        this.mascotas = new ArrayList<>();
     }
 
     public String getNombre() {

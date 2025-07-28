@@ -4,12 +4,18 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Juanes Cardona
  */
-public abstract class  Persona {
+public abstract class  Persona implements Serializable{
     protected String nombre;
+
+    public Persona() {
+    }
+    
 
     public Persona(String nombre) {
         this.nombre = nombre;

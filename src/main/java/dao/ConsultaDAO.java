@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ConsultaDAO {
 
-    private ArchivoManager archivo;
+   /* private ArchivoManager archivo;
     private ArrayList<Consulta> consultas;
 
     public ConsultaDAO() {
@@ -83,5 +83,5 @@ public class ConsultaDAO {
             lineas.add(c.toLineaArchivo());
         }
         archivo.sobrescribirArchivo(lineas);
-    }
+    }*/
 }

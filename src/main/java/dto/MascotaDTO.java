@@ -4,17 +4,23 @@
  */
 package dto;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Juanes Cardona
  */
 
-public class MascotaDTO {
+public class MascotaDTO implements Serializable{
     private String id;
     private String nombre;
     private String especie;
     private String edad;
     private String documentoProp; 
+
+    public MascotaDTO() {
+    }
+    
 
     public MascotaDTO(String id, String nombre, String especie, String edad, String documentoProp) {
         setId(id);
