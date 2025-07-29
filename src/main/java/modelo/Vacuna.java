@@ -17,13 +17,38 @@ public class Vacuna extends Medicina implements Serializable{
     private String lote;
     private LocalDate proximaDosis;
 
-    public Vacuna(String tipo, String lote, String fecha, String proximaDosis, String codigo) {
-        super(fecha,codigo);
+    public Vacuna(String tipo, String lote, String fecha, String proximaDosis, String codigo, String idMas, String docProp, String nomMascota) {
+        super(codigo, fecha, idMas, docProp, nomMascota);
         setTipo(tipo);
         setLote(lote);
         setProximaDosis(proximaDosis);
     }
 
+    public String getIdMas() {
+        return idMas;
+    }
+
+    public void setIdMas(String idMas) {
+        this.idMas = idMas;
+    }
+
+    public String getNomMascota() {
+        return nomMascota;
+    }
+
+    public void setNomMascota(String nomMascota) {
+        this.nomMascota = nomMascota;
+    }
+
+
+    public String getDocProp() {
+        return docProp;
+    }
+
+    public void setDocProp(String docProp) {
+        this.docProp = docProp;
+    }
+    
     public String getCodigo() {
         return codigo;
     }

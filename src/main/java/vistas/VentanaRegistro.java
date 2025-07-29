@@ -768,7 +768,7 @@ cargarListaMascotas();
                Generator.inicializarContadorMascota(cantidadActual);
 
     // 🔁 2. Ahora sí, genera el ID (empezará desde M{cantidadActual + 1})
-              String idGenerado = Generator.generarCodigoMascota();
+            String idGenerado = Generator.generarCodigoMascota();
               
             String nombre = txtNombre.getText();
             String especie = txtEspecie.getText();

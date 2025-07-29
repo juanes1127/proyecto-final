@@ -5,24 +5,48 @@
 package vistas;
 
 import controladores.VeterinarioControlador;
+import dto.MascotaDTO;
 import java.util.ArrayList;
 import modelo.Veterinario;
+import utiles.Generator;
+import dto.veterinarioDTO;
+import java.util.List;
+import javax.swing.JOptionPane;
+import dto.ConsultaDTO;
+import java.time.LocalDate;
+import dto.DtoMedicina;
+import controladores.ControladorMedicina;
+import javax.swing.table.DefaultTableModel;
+import controladores.MascotaControlador;
 /**
  *
  * @author Juanes Cardona
  */
 public class VentaCita extends javax.swing.JFrame {
     
-    private ArrayList<Veterinario> veterinarios = new ArrayList<>();
     private VeterinarioControlador vetControlador;
+    private ControladorMedicina controladorMedicina;
+    private MascotaControlador mascotaControlador;
+   
     /**
      * Creates new form VentaCita
      */
     public VentaCita() {
         initComponents();
-        vetControlador = new VeterinarioControlador();
+        this.controladorMedicina = new ControladorMedicina();
+        this.vetControlador = new VeterinarioControlador();
+        this.mascotaControlador = new MascotaControlador();
         cargarVet();
+        tablaCons.setModel(new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"Fecha","Codigo","ID", "Nombre Mascota", "Documento Propietario", "Diagnostico", "Tratamiento"} ));
+
     }
+    private void limpiarCamposCons(){
+    txtDiagnostico.setText("");
+    txtIdMas.setText("");
+    txtTratamiento.setText("");
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,19 +61,22 @@ public class VentaCita extends javax.swing.JFrame {
         panelTitulo = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        lblDocPro = new javax.swing.JLabel();
         lblNomMas = new javax.swing.JLabel();
         lblDiagnostico = new javax.swing.JLabel();
         lblTratamiento = new javax.swing.JLabel();
-        txtDocPro = new javax.swing.JTextField();
-        txtNomMas = new javax.swing.JTextField();
+        txtIdMas = new javax.swing.JTextField();
         txtDiagnostico = new javax.swing.JTextField();
         txtTratamiento = new javax.swing.JTextField();
         btnRegistrar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
-        comboVets = new javax.swing.JComboBox<>();
         lblNomMas1 = new javax.swing.JLabel();
+        comboboxVet = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaCons = new javax.swing.JTable();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -63,9 +90,6 @@ public class VentaCita extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
-        lblDocPro.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblDocPro.setText("Documento Propietario");
-
         lblNomMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblNomMas.setText("Veterinarios:");
 
@@ -75,9 +99,7 @@ public class VentaCita extends javax.swing.JFrame {
         lblTratamiento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTratamiento.setText("Tratamiento");
 
-        txtDocPro.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
-        txtNomMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtIdMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtDiagnostico.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -110,87 +132,127 @@ public class VentaCita extends javax.swing.JFrame {
             }
         });
 
-        comboVets.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         lblNomMas1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblNomMas1.setText("Nombre Mascota");
+        lblNomMas1.setText("Id Mascota");
+
+        comboboxVet.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        tablaCons.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tablaCons);
+
+        btnEditar.setBackground(java.awt.Color.gray);
+        btnEditar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setBackground(java.awt.Color.gray);
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnActualizar.setBackground(java.awt.Color.gray);
+        btnActualizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblDocPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblDiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblTratamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(lblNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboVets, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtDocPro)
-                    .addComponent(txtNomMas)
-                    .addComponent(txtDiagnostico)
-                    .addComponent(txtTratamiento, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegistrar))
-                        .addGap(46, 46, 46))))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(16, 16, 16)
-                    .addComponent(lblNomMas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGap(337, 337, 337)))
+                        .addComponent(lblNomMas1)
+                        .addGap(85, 85, 85)
+                        .addComponent(txtIdMas))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtDiagnostico)
+                            .addComponent(comboboxVet, 0, 281, Short.MAX_VALUE)
+                            .addComponent(txtTratamiento))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRegistrar)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(97, 97, 97))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(124, 124, 124)
+                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDocPro)
-                    .addComponent(txtDocPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRegistrar))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(txtNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtIdMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNomMas1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNomMas)
+                            .addComponent(comboboxVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboVets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblNomMas)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(btnLimpiar)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblDiagnostico)
-                            .addComponent(txtDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(btnMenu)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnMenu)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegistrar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLimpiar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTratamiento)
                     .addComponent(txtTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(11, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(103, 103, 103)
-                    .addComponent(lblNomMas1)
-                    .addContainerGap(131, Short.MAX_VALUE)))
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEditar)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnActualizar))
+                .addGap(48, 48, 48))
         );
 
         javax.swing.GroupLayout panelTituloLayout = new javax.swing.GroupLayout(panelTitulo);
@@ -198,19 +260,19 @@ public class VentaCita extends javax.swing.JFrame {
         panelTituloLayout.setHorizontalGroup(
             panelTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(panelTituloLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTituloLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 765, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelTituloLayout.setVerticalGroup(
             panelTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTituloLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblTitulo)
+                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(15, 15, 15))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -221,23 +283,100 @@ public class VentaCita extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     public void cargarVet() {
-        comboVets.removeAllItems();
-        veterinarios = vetControlador.getVeterinarios();
+    comboboxVet.removeAllItems(); // Limpieza recomendada
+    comboboxVet.addItem("Seleccione una opción");
+
+        ArrayList<veterinarioDTO> veterinarios = vetControlador.getVeterinarios();
     
-    for (Veterinario veterinario : veterinarios) {
-        String txt = veterinario.getNombre() + " " + veterinario.getEspecialidad();
-        comboVets.addItem(txt);
+    for (veterinarioDTO vet : veterinarios) {
+        String txt = vet.getNombre() + "-" + vet.getEspecialidad();
+        comboboxVet.addItem(txt);
     }
 }
     
+    public void listarConsultasTabla() {
+    DefaultTableModel modelo = (DefaultTableModel) tablaCons.getModel();
+    modelo.setRowCount(0); // Limpiar tabla
+
+    ArrayList<ConsultaDTO> consultas = controladorMedicina.getConsultas();
+
+    for (ConsultaDTO consulta : consultas) {
+        Object[] fila = {
+            consulta.getFecha(),                   
+            consulta.getCodigo(),                  
+            consulta.getIdMas(),
+            consulta.getNomMascota(),
+            consulta.getDocProp(),    
+            consulta.getDiagnostico(),             
+            consulta.getTratamiento()              
+        };
+        modelo.addRow(fila);
+    }
+
+    tablaCons.setModel(modelo);
+}
+    
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+ try {
+        String idMas = txtIdMas.getText().trim();
+        String diagnostico = txtDiagnostico.getText().trim();
+        String tratamiento = txtTratamiento.getText().trim();
+        String codigo = Generator.generarCodigoConsulta();
+        String fecha = LocalDate.now().toString();
+        if (idMas.isEmpty() ||  diagnostico.isEmpty() || tratamiento.isEmpty() || codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+    // Validar que el nombre solo contenga letras (y espacios opcionalmente)
+    if (!diagnostico.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+        JOptionPane.showMessageDialog(this, "El diagnostico debe contener solo letras.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+     if (!tratamiento.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+        JOptionPane.showMessageDialog(this, "El tratamiento debe contener solo letras.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    } 
+        
+        MascotaDTO buscar = mascotaControlador.buscarMascotaPorId(idMas);
+        
+        if(buscar == null){
+            JOptionPane.showMessageDialog(this, "no se puede registrar una mascota sin una mascota previamente registrada");
+            return;
+        }
+        String docprop = buscar.getDocumentoProp();
+        
+        DtoMedicina nuevo = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+            
+        if(nuevo != null){
+            JOptionPane.showMessageDialog(this, "Ya existe una consulta con el codigo: "+ codigo );
+            return;
+        }
+        docprop = buscar.getDocumentoProp();
+        ConsultaDTO cons = new ConsultaDTO(diagnostico, tratamiento, codigo, fecha, idMas, docprop, buscar.getNombre());
+        boolean exito = controladorMedicina.registrarMedicina(cons);
+
+        if (exito) {    
+            JOptionPane.showMessageDialog(this, "consulta registrado correctamente.");
+            listarConsultasTabla();
+            limpiarCamposCons();
+          
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo registrar la consulta.");
+        }
+
+    } catch (IllegalArgumentException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
         
         
@@ -250,6 +389,19 @@ public class VentaCita extends javax.swing.JFrame {
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+        listarConsultasTabla();
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -287,22 +439,25 @@ public class VentaCita extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnRegistrar;
-    private javax.swing.JComboBox<String> comboVets;
+    private javax.swing.JComboBox<String> comboboxVet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDiagnostico;
-    private javax.swing.JLabel lblDocPro;
     private javax.swing.JLabel lblNomMas;
     private javax.swing.JLabel lblNomMas1;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTratamiento;
     private javax.swing.JPanel panelTitulo;
+    private javax.swing.JTable tablaCons;
     private javax.swing.JTextField txtDiagnostico;
-    private javax.swing.JTextField txtDocPro;
-    private javax.swing.JTextField txtNomMas;
+    private javax.swing.JTextField txtIdMas;
     private javax.swing.JTextField txtTratamiento;
     // End of variables declaration//GEN-END:variables
 }

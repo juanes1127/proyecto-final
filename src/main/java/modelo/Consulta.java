@@ -11,11 +11,36 @@ import java.time.format.DateTimeParseException;
 public class Consulta extends Medicina implements Serializable{
     private String Diagnostico;
     private String Tratamiento;
-
-    public Consulta(String codigo, String fecha, String Diagnostico, String Tratamiento) {
-        super(fecha,codigo);
+    
+    public Consulta(String codigo, String fecha, String Diagnostico, String Tratamiento,String idMas, String docProp, String nomMascota) {
+        super(fecha,codigo,idMas, docProp, nomMascota);
         setDiagnostico(Diagnostico);
         setTratamiento(Tratamiento);
+    }
+
+    public String getIdMas() {
+        return idMas;
+    }
+
+    public void setIdMas(String idMas) {
+        this.idMas = idMas;
+    }
+
+    public String getNomMascota() {
+        return nomMascota;
+    }
+
+    public void setNomMascota(String nomMascota) {
+        this.nomMascota = nomMascota;
+    }
+
+
+    public String getDocProp() {
+        return docProp;
+    }
+
+    public void setDocProp(String docProp) {
+        this.docProp = docProp;
     }
 
     public String getDiagnostico() {

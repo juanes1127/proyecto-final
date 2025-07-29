@@ -1,5 +1,5 @@
 package controladores;
-
+import dto.veterinarioDTO;
 import dao.VeterinarioDAO;
 import java.util.ArrayList;
 import modelo.Veterinario;
@@ -15,7 +15,7 @@ public class VeterinarioControlador {
         this.dao = new VeterinarioDAO();
     }
 
-    public ArrayList<Veterinario> getVeterinarios() {
+    public ArrayList<veterinarioDTO> getVeterinarios() {
         return dao.getVeterinarios();
     }
 }

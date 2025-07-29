@@ -15,11 +15,13 @@ public class VacunaDTO extends DtoMedicina implements Serializable {
     private String proximaDosis;
     private String tipo;
 
-    public VacunaDTO (String proximaDosis, String codigo, String fecha, String tipo) {
-        super(codigo, fecha);
+    public VacunaDTO(String proximaDosis, String tipo, String codigo, String fecha, String idMas, String docProp, String nomMascota) {
+        super(codigo, fecha, idMas, docProp, nomMascota);
         this.proximaDosis = proximaDosis;
         this.tipo = tipo;
     }
+
+    
     
     public String getTipo() {
         return tipo;
@@ -46,21 +48,6 @@ public class VacunaDTO extends DtoMedicina implements Serializable {
     public void setProximaDosis(String proximaDosis) {
         this.proximaDosis = proximaDosis;
     }
-   
-    public static VacunaDTO desdeLineaArchivo(String linea) {
-    String[] partes = linea.split(",");
-    if (partes.length != 4) return null;
-
-    return new VacunaDTO(partes[0], partes[1], partes[2], partes[3]);
-}
-    public String toLineaArchivo() {
-    return proximaDosis + "," + codigo + "," + fecha + "," + tipo;
-}
-    /*// Método auxiliar si se desea mostrar
-    public String mostrarVacuna() {
-        return "Tipo: " + tipo + " | Lote: " + lote +
-               " | Fecha Aplicación: " + fechaAplicacion +
-               " | Próxima dosis: " + proximaDosis;
-    } */  
+ 
 }
 

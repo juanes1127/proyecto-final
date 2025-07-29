@@ -14,17 +14,48 @@ import java.time.format.DateTimeParseException;
  */
 public abstract class DtoMedicina implements Serializable{
     
-    String codigo;
+     String codigo;
     LocalDate fecha;
+    String idMas;
+    String docProp;
+    String nomMascota;
 
-    public DtoMedicina(String codigo, String fecha) {
+    public DtoMedicina (String codigo, String fecha,String idMas, String docProp,String nomMascota) {
         setCodigo(codigo);
         setFecha(fecha);
+        setIdMas(idMas);
+        setDocProp(docProp);
+        setNomMascota(nomMascota);
     }
-
-    public String getCodigo() {
+ public String getCodigo() {
         return codigo;
     }
+
+    public String getIdMas() {
+        return idMas;
+    }
+
+    public void setIdMas(String idMas) {
+        this.idMas = idMas;
+    }
+
+    public String getDocProp() {
+        return docProp;
+    }
+
+    public void setDocProp(String docProp) {
+        this.docProp = docProp;
+    }
+
+    public String getNomMascota() {
+        return nomMascota;
+    }
+
+    public void setNomMascota(String nomMascota) {
+        this.nomMascota = nomMascota;
+    }
+    
+
 
    public void setCodigo(String codigo) {
     if (codigo == null || codigo.isBlank()) {

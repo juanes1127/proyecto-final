@@ -6,6 +6,8 @@ package dao;
 
 import java.util.ArrayList;
 import modelo.Veterinario;
+import dto.veterinarioDTO;
+import java.util.List;
 
 
 /**
@@ -13,21 +15,16 @@ import modelo.Veterinario;
  */
 public class VeterinarioDAO {
 
-   private  ArrayList<Veterinario>  veterinarios;
+   private  ArrayList<veterinarioDTO>  veterinarios;
 
     public VeterinarioDAO() {
       veterinarios = new ArrayList<>();
+      veterinarios.add(new veterinarioDTO("Pedro", "cirujano"));
+      veterinarios.add(new veterinarioDTO("Juan", "medico"));
     }
 
-    public void veterinarios(){
-        veterinarios = new ArrayList<>();
-        veterinarios.add(new Veterinario("Pedro", "cirujano"));
-        veterinarios.add(new Veterinario("Juan", "medico"));
-     }
-
-    public ArrayList<Veterinario> getVeterinarios() {
+  
+    public ArrayList<veterinarioDTO> getVeterinarios() {
         return veterinarios;
     }
-    
-    
 }

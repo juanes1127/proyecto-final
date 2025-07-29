@@ -5,8 +5,11 @@
 package controladores;
 import dao.DaoMedicina;
 import dao.MascotaDAO;
+import dto.ConsultaDTO;
 import dto.DtoMedicina;
 import dto.MascotaDTO;
+import dto.VacunaDTO;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,6 +60,29 @@ public class ControladorMedicina {
     public DtoMedicina buscarMedicinaPorcodigo(String codigo) {
         return dao.buscarPorCodigo(codigo);
     }
+    
+       // Este método filtra y devuelve solo vacunas
+    public ArrayList<VacunaDTO> getVacunas() {
+        ArrayList<VacunaDTO> vacunas = new ArrayList<>();
+        for (DtoMedicina med : dao.listar()) {
+            if (med instanceof VacunaDTO) {
+                vacunas.add((VacunaDTO) med);
+            }
+        }
+        return vacunas;
+    }
 
+    // Este método filtra y devuelve solo consultas
+    public ArrayList<ConsultaDTO> getConsultas() {
+        ArrayList<ConsultaDTO> consultas = new ArrayList<>();
+        for (DtoMedicina med : dao.listar()) {
+            if (med instanceof ConsultaDTO) {
+                consultas.add((ConsultaDTO) med);
+            }
+        }
+        return consultas;
+    }
 }
+
+
 

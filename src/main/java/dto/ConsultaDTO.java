@@ -13,8 +13,8 @@ public class ConsultaDTO extends DtoMedicina implements Serializable {
     private String Diagnostico;
     private String Tratamiento;
 
-    public ConsultaDTO(String Diagnostico, String Tratamiento, String codigo, String fecha) {
-        super(codigo, fecha);
+    public ConsultaDTO(String Diagnostico, String Tratamiento, String codigo, String fecha, String idMas, String docProp, String nomMascota) {
+        super(codigo, fecha, idMas, docProp, nomMascota);
         this.Diagnostico = Diagnostico;
         this.Tratamiento = Tratamiento;
     }
