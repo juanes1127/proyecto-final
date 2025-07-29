@@ -5,6 +5,7 @@
 package dto;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  *
@@ -12,16 +13,55 @@ import java.io.Serializable;
  */
 public class VacunaDTO extends DtoMedicina implements Serializable {
     
-    private String proximaDosis;
     private String tipo;
+    private String lote;
 
-    public VacunaDTO(String proximaDosis, String tipo, String codigo, String fecha, String idMas, String docProp, String nomMascota) {
+    public VacunaDTO( String tipo, String codigo, String fecha, String idMas, String docProp, String nomMascota,String lote) {
         super(codigo, fecha, idMas, docProp, nomMascota);
-        this.proximaDosis = proximaDosis;
-        this.tipo = tipo;
+        setTipo(tipo);
+        setLote(lote);
     }
 
-    
+    public String getLote() {
+        return lote;
+    }
+
+    public void setLote(String lote) {
+        this.lote = lote;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getIdMas() {
+        return idMas;
+    }
+
+    public void setIdMas(String idMas) {
+        this.idMas = idMas;
+    }
+
+    public String getDocProp() {
+        return docProp;
+    }
+
+    public void setDocProp(String docProp) {
+        this.docProp = docProp;
+    }
+
+    public String getNomMascota() {
+        return nomMascota;
+    }
+
+    public void setNomMascota(String nomMascota) {
+        this.nomMascota = nomMascota;
+    }
+
     
     public String getTipo() {
         return tipo;
@@ -40,14 +80,5 @@ public class VacunaDTO extends DtoMedicina implements Serializable {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
-    public String getProximaDosis() {
-        return proximaDosis;
-    }
-
-    public void setProximaDosis(String proximaDosis) {
-        this.proximaDosis = proximaDosis;
-    }
- 
 }
 

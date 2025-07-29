@@ -18,6 +18,7 @@ import vistas.VentanaMenu;
 public class VentanaServicios extends javax.swing.JFrame {
     private VentanaMenu ventanaMenu;
     private VentanaVacuna ventanaVacuna;
+    private VentanaCita ventanaCita;
 
     /**
      * Creates new form VentanaServicios
@@ -25,6 +26,8 @@ public class VentanaServicios extends javax.swing.JFrame {
     public VentanaServicios(VentanaMenu ventanaMenu) {
         this.ventanaMenu = ventanaMenu;
         initComponents();
+        ventanaCita = new VentanaCita(this);
+        ventanaVacuna = new VentanaVacuna(this);
         setVisible(true);
         setVisible(false);
         
@@ -51,11 +54,11 @@ public class VentanaServicios extends javax.swing.JFrame {
 
             switch (nodoSeleccionado) {
                 
-                case "Cita" -> new VentaCita().setVisible(true);
+                case "Cita" -> ventanaCita.setVisible(true);
 
-                case "Vacuna" -> new VentanaVacuna().setVisible(true);
+                case "Vacuna" -> ventanaVacuna.setVisible(true);
                 
-                case "Salir" -> VentanaServicios.this.dispose();
+                case "Salir" -> dispose();
             }
         }
     }

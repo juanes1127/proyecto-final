@@ -18,20 +18,24 @@ import dto.DtoMedicina;
 import controladores.ControladorMedicina;
 import javax.swing.table.DefaultTableModel;
 import controladores.MascotaControlador;
+import dto.VacunaDTO;
+import javax.accessibility.AccessibleRole;
 /**
  *
  * @author Juanes Cardona
  */
-public class VentaCita extends javax.swing.JFrame {
+public class VentanaCita extends javax.swing.JFrame {
     
     private VeterinarioControlador vetControlador;
     private ControladorMedicina controladorMedicina;
     private MascotaControlador mascotaControlador;
+    private VentanaServicios menu;
    
     /**
      * Creates new form VentaCita
      */
-    public VentaCita() {
+    public VentanaCita(VentanaServicios menu) {
+        this.menu = menu;
         initComponents();
         this.controladorMedicina = new ControladorMedicina();
         this.vetControlador = new VeterinarioControlador();
@@ -77,6 +81,9 @@ public class VentaCita extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
+        bttBuscar = new javax.swing.JButton();
+        lblNomMas2 = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
 
         jLabel1.setText("jLabel1");
 
@@ -177,6 +184,20 @@ public class VentaCita extends javax.swing.JFrame {
             }
         });
 
+        bttBuscar.setBackground(java.awt.Color.gray);
+        bttBuscar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        bttBuscar.setText("Buscar");
+        bttBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttBuscarActionPerformed(evt);
+            }
+        });
+
+        lblNomMas2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNomMas2.setText("Digite el codigo de la consulta a gestionar:");
+
+        txtCodigo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -207,14 +228,23 @@ public class VentaCita extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(lblNomMas2)
+                        .addGap(29, 29, 29)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bttBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(136, 136, 136)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(63, 63, 63))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +255,7 @@ public class VentaCita extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtIdMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblNomMas1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblNomMas)
                             .addComponent(comboboxVet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -233,26 +263,30 @@ public class VentaCita extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblDiagnostico)
                             .addComponent(txtDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17))
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTratamiento)
+                            .addComponent(txtTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(btnMenu)
                         .addGap(18, 18, 18)
                         .addComponent(btnRegistrar)
                         .addGap(18, 18, 18)
-                        .addComponent(btnLimpiar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)))
+                        .addComponent(btnLimpiar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTratamiento)
-                    .addComponent(txtTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                    .addComponent(bttBuscar)
+                    .addComponent(lblNomMas2)
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
                     .addComponent(btnEliminar)
                     .addComponent(btnActualizar))
-                .addGap(48, 48, 48))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout panelTituloLayout = new javax.swing.GroupLayout(panelTitulo);
@@ -350,7 +384,7 @@ public class VentaCita extends javax.swing.JFrame {
         MascotaDTO buscar = mascotaControlador.buscarMascotaPorId(idMas);
         
         if(buscar == null){
-            JOptionPane.showMessageDialog(this, "no se puede registrar una mascota sin una mascota previamente registrada");
+            JOptionPane.showMessageDialog(this, "no se puede registrar una consulta sin una mascota previamente registrada");
             return;
         }
         String docprop = buscar.getDocumentoProp();
@@ -384,24 +418,123 @@ public class VentaCita extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
+        limpiarCamposCons();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        menu.setVisible(true);
+        
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
+         String codigo = txtCodigo.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes ingresar un código para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DtoMedicina medicina = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+
+    if (medicina == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ninguna medicina con ese código.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (medicina instanceof ConsultaDTO consulta) {
+        String nuevoDiagnostico = JOptionPane.showInputDialog(this, "Nuevo diagnóstico:", consulta.getDiagnostico());
+        if (nuevoDiagnostico == null) return;
+
+        String nuevoTratamiento = JOptionPane.showInputDialog(this, "Nuevo tratamiento:", consulta.getTratamiento());
+        if (nuevoTratamiento == null) return;
+
+        consulta.setDiagnostico(nuevoDiagnostico);
+        consulta.setTratamiento(nuevoTratamiento);
+
+        controladorMedicina.editarMedicina(consulta);
+
+        JOptionPane.showMessageDialog(this, "Consulta actualizada correctamente.");
+        txtDiagnostico.setText(nuevoDiagnostico);
+        txtTratamiento.setText(nuevoTratamiento);
+        listarConsultasTabla();
+    } else {
+        JOptionPane.showMessageDialog(this, "Solo puedes editar consultas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
+         String codigo = txtCodigo.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes ingresar un código para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DtoMedicina medicina = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+
+    if (medicina == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ninguna medicina con ese código.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar la medicina con código: " + codigo + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        controladorMedicina.eliminarMedicina(codigo);
+        JOptionPane.showMessageDialog(this, "Medicina eliminada exitosamente.");
+        listarConsultasTabla();
+        limpiarCamposCons();
+        comboboxVet.setSelectedIndex(-1);
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         listarConsultasTabla();
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void bttBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttBuscarActionPerformed
+        // TODO add your handling code here:
+         String codigo = txtCodigo.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes ingresar un código para buscar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DtoMedicina medicina = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+
+    if (medicina == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ninguna medicina con ese código.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (medicina instanceof ConsultaDTO consulta) {
+        MascotaDTO mascota = mascotaControlador.buscarMascotaPorId(consulta.getIdMas());
+
+        txtIdMas.setText(consulta.getIdMas());
+        txtDiagnostico.setText(consulta.getDiagnostico());
+        txtTratamiento.setText(consulta.getTratamiento());
+        txtCodigo.setText(consulta.getCodigo());
+
+        String especie = mascota.getEspecie().trim().toLowerCase();
+        for (int i = 0; i < comboboxVet.getItemCount(); i++) {
+            String item = comboboxVet.getItemAt(i).toString().trim().toLowerCase();
+            if (item.equals(especie)) {
+                comboboxVet.setSelectedIndex(i);
+                break;
+            }
+        }
+    } else if (medicina instanceof VacunaDTO) {
+        JOptionPane.showMessageDialog(this, "El código ingresado pertenece a una vacuna, no a una consulta.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "Tipo de medicina desconocido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
+    }//GEN-LAST:event_bttBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -420,20 +553,21 @@ public class VentaCita extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaCita.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentaCita().setVisible(true);
+
             }
         });
     }
@@ -445,6 +579,7 @@ public class VentaCita extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton bttBuscar;
     private javax.swing.JComboBox<String> comboboxVet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -452,10 +587,12 @@ public class VentaCita extends javax.swing.JFrame {
     private javax.swing.JLabel lblDiagnostico;
     private javax.swing.JLabel lblNomMas;
     private javax.swing.JLabel lblNomMas1;
+    private javax.swing.JLabel lblNomMas2;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTratamiento;
     private javax.swing.JPanel panelTitulo;
     private javax.swing.JTable tablaCons;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDiagnostico;
     private javax.swing.JTextField txtIdMas;
     private javax.swing.JTextField txtTratamiento;

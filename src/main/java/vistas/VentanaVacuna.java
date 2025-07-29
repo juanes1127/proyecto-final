@@ -4,18 +4,68 @@
  */
 package vistas;
 
+import dto.ConsultaDTO;
+import dto.DtoMedicina;
+import dto.MascotaDTO;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+import utiles.Generator;
+import controladores.ConsultaControlador;
+import controladores.MascotaControlador;
+import controladores.ControladorMedicina;
+import dto.VacunaDTO;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Juanes Cardona
  */
 public class VentanaVacuna extends javax.swing.JFrame {
-
+     private ConsultaControlador consultaControlador;
+     private MascotaControlador mascotaControlador;
+     private ControladorMedicina controladorMedicina;
+     private VentanaServicios menu;
     /**
      * Creates new form VentanaVacuna
      */
-    public VentanaVacuna() {
+    public VentanaVacuna(VentanaServicios menu) {
         initComponents();
+        this.menu = menu;
+        this.consultaControlador = new ConsultaControlador();
+        this.mascotaControlador = new MascotaControlador();
+        this.controladorMedicina = new ControladorMedicina();
+        tablaVacuna.setModel(new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"Fecha","Codigo","ID", "Nombre Mascota", "Documento Propietario", "Tipo", "Lote"} ));
+
     }
+        private void limpiarCamposVac(){
+    txtLote.setText("");
+    txtMascota.setText("");
+    txtTipoVacuna.setText("");
+}
+        public void listarVacunasTabla() {
+    DefaultTableModel modelo = (DefaultTableModel) tablaVacuna.getModel();
+    modelo.setRowCount(0); // Limpiar tabla
+
+    ArrayList<VacunaDTO> vacunas = controladorMedicina.getVacunas();
+
+    for (VacunaDTO vacuna : vacunas) {
+        Object[] fila = {
+            vacuna.getFecha(),                   
+            vacuna.getCodigo(),                  
+            vacuna.getIdMas(),
+            vacuna.getNomMascota(),
+            vacuna.getDocProp(),    
+            vacuna.getTipo(),             
+            vacuna.getLote()
+        };
+        modelo.addRow(fila);
+    }
+
+    tablaVacuna.setModel(modelo);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,17 +79,23 @@ public class VentanaVacuna extends javax.swing.JFrame {
         panelTitulo = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        lblDocPro = new javax.swing.JLabel();
         lblNomMas = new javax.swing.JLabel();
         lblTipVacuna = new javax.swing.JLabel();
-        lblFechaAplica = new javax.swing.JLabel();
         btnRegistrar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
-        txtDocPro = new javax.swing.JTextField();
-        txtNomMas = new javax.swing.JTextField();
-        txtTipMas = new javax.swing.JTextField();
-        txtFechAplica = new javax.swing.JTextField();
+        txtMascota = new javax.swing.JTextField();
+        txtTipoVacuna = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaVacuna = new javax.swing.JTable();
+        btnActualizar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtLote = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtCodigoVac = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,17 +107,11 @@ public class VentanaVacuna extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
-        lblDocPro.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblDocPro.setText("Documento Propietario");
-
         lblNomMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblNomMas.setText("Nombre Mascota");
+        lblNomMas.setText("Id Mascota:");
 
         lblTipVacuna.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblTipVacuna.setText("Tipo Vacuna");
-
-        lblFechaAplica.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblFechaAplica.setText("Fecha Aplicacion");
+        lblTipVacuna.setText("Tipo Vacuna:");
 
         btnRegistrar.setBackground(java.awt.Color.gray);
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -90,74 +140,151 @@ public class VentanaVacuna extends javax.swing.JFrame {
             }
         });
 
-        txtDocPro.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtMascota.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        txtNomMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTipoVacuna.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        txtTipMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tablaVacuna.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaVacuna);
 
-        txtFechAplica.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnActualizar.setBackground(java.awt.Color.gray);
+        btnActualizar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setBackground(java.awt.Color.gray);
+        btnEditar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setBackground(java.awt.Color.gray);
+        btnEliminar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setBackground(java.awt.Color.gray);
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Lote:");
+
+        txtLote.setText(" ");
+        txtLote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLoteActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Ingresa el codigo de la vacuna a gestionar:");
+
+        txtCodigoVac.setText(" ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblNomMas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTipVacuna, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblDocPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblFechaAplica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblNomMas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTipVacuna, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtMascota)
+                    .addComponent(txtTipoVacuna)
+                    .addComponent(txtLote, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRegistrar)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(63, 63, 63))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDocPro, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFechAplica, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnLimpiar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(21, 21, 21))
+                        .addGap(41, 41, 41)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCodigoVac)
+                        .addGap(40, 40, 40))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTipMas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(95, 95, 95)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(59, 59, 59))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDocPro)
-                    .addComponent(btnRegistrar)
-                    .addComponent(txtDocPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNomMas)
-                            .addComponent(txtNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(btnLimpiar)))
-                .addGap(13, 13, 13)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblTipVacuna)
-                    .addComponent(txtTipMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(27, 27, 27)
                         .addComponent(btnMenu)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLimpiar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRegistrar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMascota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNomMas, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtFechAplica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblFechaAplica))
-                        .addGap(17, 17, 17))))
+                            .addComponent(lblTipVacuna)
+                            .addComponent(txtTipoVacuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(txtLote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtCodigoVac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnActualizar)
+                    .addComponent(btnEditar)
+                    .addComponent(btnEliminar))
+                .addGap(20, 20, 20))
         );
 
         javax.swing.GroupLayout panelTituloLayout = new javax.swing.GroupLayout(panelTitulo);
@@ -166,10 +293,9 @@ public class VentanaVacuna extends javax.swing.JFrame {
             panelTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTituloLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         panelTituloLayout.setVerticalGroup(
             panelTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,8 +303,7 @@ public class VentanaVacuna extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(12, 12, 12))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -196,7 +321,52 @@ public class VentanaVacuna extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+try {
+        String idMas = txtMascota.getText().trim();
+        String tipo = txtTipoVacuna.getText().trim();
+        String codigo = Generator.generarCodigoVacuna();
+        String lote = txtLote.getText();
+        String fecha = LocalDate.now().toString();
+        if (idMas.isEmpty() ||  tipo.isEmpty() || codigo.isEmpty() || lote.isEmpty() || fecha.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+    // Validar que el nombre solo contenga letras (y espacios opcionalmente)
+    
+   
+        
+        MascotaDTO buscar = mascotaControlador.buscarMascotaPorId(idMas);
+        
+        if(buscar == null){
+            JOptionPane.showMessageDialog(this, "no se puede registrar una Vacuna sin una mascota previamente registrada");
+            return;
+        }
+        String docprop = buscar.getDocumentoProp();
+        
+        DtoMedicina nuevo = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+            
+        if(nuevo != null){
+            JOptionPane.showMessageDialog(this, "Ya existe una consulta con el codigo: "+ codigo );
+            return;
+        }
+        docprop = buscar.getDocumentoProp();
+        VacunaDTO vac = new VacunaDTO(tipo, codigo, fecha, idMas, docprop , buscar.getNombre(),lote);
+        boolean exito = controladorMedicina.registrarMedicina(vac);
+
+        if (exito) {    
+            JOptionPane.showMessageDialog(this, "Vacuna registrado correctamente.");
+            listarVacunasTabla();
+            limpiarCamposVac();
+          
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo registrar la vacuna.");
+        }
+
+    } catch (IllegalArgumentException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -205,7 +375,114 @@ public class VentanaVacuna extends javax.swing.JFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        menu.setVisible(true);
     }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+listarVacunasTabla();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+     String codigo = txtCodigoVac.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes ingresar un código para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DtoMedicina medicina = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+
+    if (medicina == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ninguna vacuna con ese código.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (medicina instanceof VacunaDTO vacuna) {
+        String nuevoTipo = JOptionPane.showInputDialog(this, "Nuevo tipo de vacuna:", vacuna.getTipo());
+        if (nuevoTipo == null) return;
+
+        String nuevoLote = JOptionPane.showInputDialog(this, "Nuevo lote de vacuna:", vacuna.getLote());
+        if (nuevoLote == null) return;
+
+        vacuna.setTipo(nuevoTipo);
+        vacuna.setLote(nuevoTipo);
+
+        controladorMedicina.editarMedicina(vacuna);
+
+        JOptionPane.showMessageDialog(this, "Vacuna actualizada correctamente.");
+        txtTipoVacuna.setText(nuevoTipo);
+        txtLote.setText(nuevoLote);
+        listarVacunasTabla();
+    } else {
+        JOptionPane.showMessageDialog(this, "Solo puedes editar vacunas.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
+
+
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+ String codigo = txtCodigoVac.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes ingresar un código para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DtoMedicina medicina = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+
+    if (medicina == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ninguna vacuna con ese código.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar la vacuna con código: " + codigo + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        controladorMedicina.eliminarMedicina(codigo);
+        JOptionPane.showMessageDialog(this, "Vacuna eliminada exitosamente.");
+        listarVacunasTabla();
+         limpiarCamposVac();
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+  String codigo = txtCodigoVac.getText().trim();
+
+    if (codigo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes ingresar un código para buscar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    DtoMedicina medicina = controladorMedicina.buscarMedicinaPorcodigo(codigo);
+
+    if (medicina == null) {
+        JOptionPane.showMessageDialog(this, "No se encontró ninguna vacuna con ese código.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (medicina instanceof VacunaDTO vacuna) {
+        MascotaDTO mascota = mascotaControlador.buscarMascotaPorId(vacuna.getIdMas());
+
+        txtMascota.setText(vacuna.getIdMas());
+        txtLote.setText(vacuna.getLote());
+        txtTipoVacuna.setText(vacuna.getTipo());
+        txtCodigoVac.setText(vacuna.getCodigo());
+
+       
+        
+    } else if (medicina instanceof ConsultaDTO) {
+        JOptionPane.showMessageDialog(this, "El código ingresado pertenece a una consulta, no a una vacuna.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "Tipo de medicina desconocido.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
+
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtLoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLoteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,25 +514,30 @@ public class VentanaVacuna extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaVacuna().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblDocPro;
-    private javax.swing.JLabel lblFechaAplica;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblNomMas;
     private javax.swing.JLabel lblTipVacuna;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPanel panelTitulo;
-    private javax.swing.JTextField txtDocPro;
-    private javax.swing.JTextField txtFechAplica;
-    private javax.swing.JTextField txtNomMas;
-    private javax.swing.JTextField txtTipMas;
+    private javax.swing.JTable tablaVacuna;
+    private javax.swing.JTextField txtCodigoVac;
+    private javax.swing.JTextField txtLote;
+    private javax.swing.JTextField txtMascota;
+    private javax.swing.JTextField txtTipoVacuna;
     // End of variables declaration//GEN-END:variables
 }

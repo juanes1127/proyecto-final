@@ -15,13 +15,11 @@ import java.time.format.DateTimeParseException;
 public class Vacuna extends Medicina implements Serializable{
     private String tipo;
     private String lote;
-    private LocalDate proximaDosis;
 
-    public Vacuna(String tipo, String lote, String fecha, String proximaDosis, String codigo, String idMas, String docProp, String nomMascota) {
+    public Vacuna(String tipo, String lote, String fecha, String codigo, String idMas, String docProp, String nomMascota) {
         super(codigo, fecha, idMas, docProp, nomMascota);
         setTipo(tipo);
         setLote(lote);
-        setProximaDosis(proximaDosis);
     }
 
     public String getIdMas() {
@@ -80,19 +78,7 @@ public class Vacuna extends Medicina implements Serializable{
     }
 
   
-    public LocalDate getProximaDosis() {
-        return proximaDosis;
-    }
-
-    public void setProximaDosis(String proximaDosis) {
-       try {
-            this.proximaDosis = LocalDate.parse(proximaDosis); 
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Formato de fecha inválido.");
-        }
-    }
 }
-   
   /*  public String toLineaArchivo() {
         return tipo + "," + lote + "," + fechaAplicacion.toString() + "," + proximaDosis.toString();
     }
