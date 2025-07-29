@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 public class VacunaControlador {
 
-    private VacunaDAO dao;
+  /*  private VacunaDAO dao;
 
     public VacunaControlador(VacunaDAO dao) {
         this.dao = dao;
@@ -78,5 +78,5 @@ public class VacunaControlador {
             System.out.println("Error al eliminar vacuna: " + e.getMessage());
             return false;
         }
-    }
+    }*/
 }

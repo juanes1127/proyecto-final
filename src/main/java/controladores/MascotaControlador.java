@@ -58,7 +58,7 @@ public class MascotaControlador {
     }
 
     // Listar todas las mascotas
-    public ArrayList<MascotaDTO> obtenerMascotas() {
+    public List<MascotaDTO> obtenerMascotas() {
         return dao.listar();
     }
 

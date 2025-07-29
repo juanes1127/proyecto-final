@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controladores;
 
 import dao.VeterinarioDAO;
@@ -15,13 +11,11 @@ public class VeterinarioControlador {
 
     private VeterinarioDAO dao;
 
-    public VeterinarioControlador(VeterinarioDAO dao) {
-        this.dao = dao;
-        dao.getVeterinarios();
+    public VeterinarioControlador() {
+        this.dao = new VeterinarioDAO();
     }
 
-public ArrayList<Veterinario>getveterinarios(){
-    return dao.getVeterinarios();
-}
-    
+    public ArrayList<Veterinario> getVeterinarios() {
+        return dao.getVeterinarios();
+    }
 }

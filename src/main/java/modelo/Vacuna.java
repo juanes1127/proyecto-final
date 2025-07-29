@@ -4,6 +4,7 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -11,18 +12,31 @@ import java.time.format.DateTimeParseException;
  *
  * @author Juanes Cardona
  */
-public class Vacuna {
+public class Vacuna extends Medicina implements Serializable{
     private String tipo;
     private String lote;
-    private LocalDate fechaAplicacion;
     private LocalDate proximaDosis;
 
-    public Vacuna(String tipo, String lote, LocalDate fechaAplicacion, LocalDate proximaDosis) {
-        this.tipo = tipo;
-        this.lote = lote;
-        this.fechaAplicacion = fechaAplicacion;
-        this.proximaDosis = proximaDosis;
+    public Vacuna(String tipo, String lote, String fecha, String proximaDosis, String codigo) {
+        super(fecha,codigo);
+        setTipo(tipo);
+        setLote(lote);
+        setProximaDosis(proximaDosis);
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    @Override
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    
 
     public String getTipo() {
         return tipo;
@@ -40,23 +54,21 @@ public class Vacuna {
         this.lote = lote;
     }
 
-    public LocalDate getFechaAplicacion() {
-        return fechaAplicacion;
-    }
-
-    public void setFechaAplicacion(LocalDate fechaAplicacion) {
-        this.fechaAplicacion = fechaAplicacion;
-    }
-
+  
     public LocalDate getProximaDosis() {
         return proximaDosis;
     }
 
-    public void setProximaDosis(LocalDate proximaDosis) {
-        this.proximaDosis = proximaDosis;
+    public void setProximaDosis(String proximaDosis) {
+       try {
+            this.proximaDosis = LocalDate.parse(proximaDosis); 
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Formato de fecha inválido.");
+        }
     }
+}
    
-    public String toLineaArchivo() {
+  /*  public String toLineaArchivo() {
         return tipo + "," + lote + "," + fechaAplicacion.toString() + "," + proximaDosis.toString();
     }
 
@@ -75,7 +87,6 @@ public class Vacuna {
         } catch (DateTimeParseException e) {
             return null;
         }
-    }
-   
+    }*/
     
-}
+

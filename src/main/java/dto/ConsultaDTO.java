@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dto;
 
-import modelo.Veterinario;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -12,16 +8,33 @@ import java.time.format.DateTimeParseException;
  *
  * @author Juanes Cardona
  */
-public class ConsultaDTO {
-    private String codigo;
-    private LocalDate fecha;
-    private Veterinario veterinario;
+public class ConsultaDTO extends DtoMedicina implements Serializable {
 
-    public ConsultaDTO(String codigo, String fecha, Veterinario veterinario) {
-        
-        setCodigo(codigo);
-        setFecha(fecha);
-        setVeterinario(veterinario);
+    private String Diagnostico;
+    private String Tratamiento;
+
+    public ConsultaDTO(String Diagnostico, String Tratamiento, String codigo, String fecha) {
+        super(codigo, fecha);
+        this.Diagnostico = Diagnostico;
+        this.Tratamiento = Tratamiento;
+    }
+
+    
+
+    public String getDiagnostico() {
+        return Diagnostico;
+    }
+
+    public void setDiagnostico(String Diagnostico) {
+        this.Diagnostico = Diagnostico;
+    }
+
+    public String getTratamiento() {
+        return Tratamiento;
+    }
+
+    public void setTratamiento(String Tratamiento) {
+        this.Tratamiento = Tratamiento;
     }
 
     public String getCodigo() {
@@ -29,30 +42,35 @@ public class ConsultaDTO {
     }
 
     public void setCodigo(String codigo) {
-        if (codigo == null || codigo.isBlank()) {
-            throw new IllegalArgumentException("Código inválido");
-        }
         this.codigo = codigo;
     }
 
-    public LocalDate getFecha() { return fecha; }
+    @Override
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
-    public void setFecha(String fechaTexto) {
+   
+
+    // Convertir desde una línea del archivo a un objeto Consulta
+  /*  public static ConsultaDTO desdeLineaArchivo(String linea) {
+        String[] partes = linea.split(",");
+        if (partes.length != 4) return null;
+
         try {
-            this.fecha = LocalDate.parse(fechaTexto); 
+            String codigo = partes[0];
+            String fecha = partes[1];
+            String diagnostico = partes[2];
+            String tratamiento = partes[3];
+
+            return new ConsultaDTO(codigo, fecha.toString(), diagnostico, tratamiento);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Formato de fecha inválido.");
+            return null;
         }
     }
 
-    public Veterinario getVeterinario() {
-        return veterinario;
-    }
-
-    public void setVeterinario(Veterinario veterinario) {
-        if (veterinario == null) {
-            throw new IllegalArgumentException("Veterinario requerido.");
-        }
-        this.veterinario = veterinario;
-    }
+    // Convertir un objeto Consulta a una línea de texto para guardar en archivo
+    public String toLineaArchivo() {
+        return codigo + "," + fecha + "," + Diagnostico + "," + Tratamiento;
+    }*/
 }

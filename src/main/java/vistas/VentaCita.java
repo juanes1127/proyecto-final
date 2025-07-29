@@ -4,17 +4,24 @@
  */
 package vistas;
 
+import controladores.VeterinarioControlador;
+import java.util.ArrayList;
+import modelo.Veterinario;
 /**
  *
  * @author Juanes Cardona
  */
 public class VentaCita extends javax.swing.JFrame {
-
+    
+    private ArrayList<Veterinario> veterinarios = new ArrayList<>();
+    private VeterinarioControlador vetControlador;
     /**
      * Creates new form VentaCita
      */
     public VentaCita() {
         initComponents();
+        vetControlador = new VeterinarioControlador();
+        cargarVet();
     }
 
     /**
@@ -41,6 +48,8 @@ public class VentaCita extends javax.swing.JFrame {
         btnRegistrar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
+        comboVets = new javax.swing.JComboBox<>();
+        lblNomMas1 = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -58,7 +67,7 @@ public class VentaCita extends javax.swing.JFrame {
         lblDocPro.setText("Documento Propietario");
 
         lblNomMas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblNomMas.setText("Nombre Mascota");
+        lblNomMas.setText("Veterinarios:");
 
         lblDiagnostico.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDiagnostico.setText("Diagnostico");
@@ -101,19 +110,29 @@ public class VentaCita extends javax.swing.JFrame {
             }
         });
 
+        comboVets.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblNomMas1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNomMas1.setText("Nombre Mascota");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblDocPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblNomMas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblDiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTratamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblDocPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblDiagnostico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblTratamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(lblNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(comboVets, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtDocPro)
                     .addComponent(txtNomMas)
                     .addComponent(txtDiagnostico)
@@ -128,6 +147,11 @@ public class VentaCita extends javax.swing.JFrame {
                             .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRegistrar))
                         .addGap(46, 46, 46))))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(lblNomMas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(337, 337, 337)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,26 +164,33 @@ public class VentaCita extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
+                        .addComponent(txtNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNomMas)
-                            .addComponent(txtNomMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(comboVets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNomMas)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addComponent(btnLimpiar)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblDiagnostico)
                             .addComponent(txtDiagnostico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
+                        .addGap(23, 23, 23)
                         .addComponent(btnMenu)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTratamiento)
                     .addComponent(txtTratamiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(11, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(103, 103, 103)
+                    .addComponent(lblNomMas1)
+                    .addContainerGap(131, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout panelTituloLayout = new javax.swing.GroupLayout(panelTitulo);
@@ -196,9 +227,20 @@ public class VentaCita extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void cargarVet() {
+        comboVets.removeAllItems();
+        veterinarios = vetControlador.getVeterinarios();
+    
+    for (Veterinario veterinario : veterinarios) {
+        String txt = veterinario.getNombre() + " " + veterinario.getEspecialidad();
+        comboVets.addItem(txt);
+    }
+}
+    
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here: 
-       
+
+        
+        
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -248,11 +290,13 @@ public class VentaCita extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JComboBox<String> comboVets;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDiagnostico;
     private javax.swing.JLabel lblDocPro;
     private javax.swing.JLabel lblNomMas;
+    private javax.swing.JLabel lblNomMas1;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTratamiento;
     private javax.swing.JPanel panelTitulo;

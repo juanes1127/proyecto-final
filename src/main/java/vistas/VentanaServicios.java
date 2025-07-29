@@ -17,6 +17,7 @@ import vistas.VentanaMenu;
  */
 public class VentanaServicios extends javax.swing.JFrame {
     private VentanaMenu ventanaMenu;
+    private VentanaVacuna ventanaVacuna;
 
     /**
      * Creates new form VentanaServicios
@@ -28,7 +29,7 @@ public class VentanaServicios extends javax.swing.JFrame {
         setVisible(false);
         
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Servicios");
-    DefaultMutableTreeNode medicina = new DefaultMutableTreeNode("Consulta General");
+    DefaultMutableTreeNode medicina = new DefaultMutableTreeNode("Cita");
     DefaultMutableTreeNode vacuna = new DefaultMutableTreeNode("Vacuna");
     DefaultMutableTreeNode salir = new DefaultMutableTreeNode("Salir");
  
@@ -49,6 +50,8 @@ public class VentanaServicios extends javax.swing.JFrame {
             String nodoSeleccionado = path.getLastPathComponent().toString();
 
             switch (nodoSeleccionado) {
+                
+                case "Cita" -> new VentaCita().setVisible(true);
 
                 case "Vacuna" -> new VentanaVacuna().setVisible(true);
                 

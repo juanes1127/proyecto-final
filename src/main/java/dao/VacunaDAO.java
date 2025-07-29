@@ -2,6 +2,7 @@ package dao;
 
 import modelo.Vacuna;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class VacunaDAO {
 
     // Lista que almacena todas las vacunas registradas
-    private ArrayList<Vacuna> vacunas = new ArrayList<>();
+   /* private List<Vacuna> vacunas = new ArrayList<>();
 
     // Constructor vacío
     public VacunaDAO() {}
@@ -61,7 +62,7 @@ public class VacunaDAO {
     }
 
     // Obtener todas las vacunas 
-    public ArrayList<Vacuna> obtenerTodas() {
+    public List<Vacuna> obtenerTodas() {
         return new ArrayList<>(vacunas);
-    }
+    }*/
 }

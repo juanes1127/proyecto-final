@@ -29,7 +29,7 @@ public class PropietarioDAO {
 
     // Guardar nuevo propietario
     public void guardarPropietario(PropietarioDTO propietario) {
-        ArrayList<PropietarioDTO> lista = listar();
+        List<PropietarioDTO> lista = listar();
 
         for (PropietarioDTO p : lista) {
             if (p.getDocumento().equalsIgnoreCase(propietario.getDocumento())) {
@@ -42,14 +42,14 @@ public class PropietarioDAO {
     }
 
     // Listar todos los propietarios
-    public ArrayList<PropietarioDTO> listar() {
-        ArrayList<PropietarioDTO> lista = gestor.cargarLista(ruta);
+    public List<PropietarioDTO> listar() {
+        List<PropietarioDTO> lista = gestor.cargarLista(ruta);
         return lista != null ? lista : new ArrayList<>();
     }
 
     // Editar propietario por documento
     public boolean editarPropietario(String documento, PropietarioDTO actualizado) {
-        ArrayList<PropietarioDTO> lista = listar();
+        List<PropietarioDTO> lista = listar();
 
         for (int i = 0; i < lista.size(); i++) {
             PropietarioDTO actual = lista.get(i);
@@ -65,7 +65,7 @@ public class PropietarioDAO {
 
     // Eliminar propietario por documento
     public void eliminarPropietario(String documento) {
-        ArrayList<PropietarioDTO> lista = listar();
+        List<PropietarioDTO> lista = listar();
 
         PropietarioDTO encontrado = null;
         for (PropietarioDTO p : lista) {

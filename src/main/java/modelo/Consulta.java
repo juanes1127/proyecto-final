@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -7,15 +8,12 @@ import java.time.format.DateTimeParseException;
  *
  * @author Juanes Cardona
  */
-public class Consulta {
-    private String codigo;
-    private LocalDate fecha;
+public class Consulta extends Medicina implements Serializable{
     private String Diagnostico;
     private String Tratamiento;
 
     public Consulta(String codigo, String fecha, String Diagnostico, String Tratamiento) {
-        setCodigo(codigo);
-        setFecha(fecha);
+        super(fecha,codigo);
         setDiagnostico(Diagnostico);
         setTratamiento(Tratamiento);
     }
@@ -47,17 +45,14 @@ public class Consulta {
     public LocalDate getFecha() {
         return fecha;
     }
+    
 
-    public void setFecha(String fechaTexto) {
-        try {
-            this.fecha = LocalDate.parse(fechaTexto); 
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Formato de fecha inválido.");
-        }
-    }
+}
+  
+
 
     // Convertir desde una línea del archivo a un objeto Consulta
-    public static Consulta desdeLineaArchivo(String linea) {
+   /* public static Consulta desdeLineaArchivo(String linea) {
         String[] partes = linea.split(",");
         if (partes.length != 4) return null;
 
@@ -77,4 +72,4 @@ public class Consulta {
     public String toLineaArchivo() {
         return codigo + "," + fecha + "," + Diagnostico + "," + Tratamiento;
     }
-}
+}*/

@@ -20,8 +20,9 @@ public class VeterinarioDAO {
     }
 
     public void veterinarios(){
-    veterinarios.add(new Veterinario("Pedro", "cirujano"));
-    veterinarios.add(new Veterinario("Juan", "medico"));
+        veterinarios = new ArrayList<>();
+        veterinarios.add(new Veterinario("Pedro", "cirujano"));
+        veterinarios.add(new Veterinario("Juan", "medico"));
      }
 
     public ArrayList<Veterinario> getVeterinarios() {

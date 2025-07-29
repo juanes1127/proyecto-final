@@ -28,7 +28,7 @@ public class MascotaDAO {
     }
 
     public void guardarMascots(MascotaDTO mascota) {
-        ArrayList<MascotaDTO> lista = listar();
+        List<MascotaDTO> lista = listar();
 
         for (MascotaDTO m : lista) {
             if (m.getId().equalsIgnoreCase(mascota.getId())) {
@@ -40,13 +40,13 @@ public class MascotaDAO {
         gestor.guardarLista(ruta, lista);
     }
 
-    public ArrayList<MascotaDTO> listar() {
-        ArrayList<MascotaDTO> lista = gestor.cargarLista(ruta);
+    public List<MascotaDTO> listar() {
+        List<MascotaDTO> lista = gestor.cargarLista(ruta);
         return lista != null ? lista : new ArrayList<>();
     }
 
     public boolean editarMascota(String idMas, MascotaDTO mascotaActualizada) {
-        ArrayList<MascotaDTO> lista = listar();
+        List<MascotaDTO> lista = listar();
 
         for (int i = 0; i < lista.size(); i++) {
             MascotaDTO actual = lista.get(i);
@@ -61,7 +61,7 @@ public class MascotaDAO {
     }
 
     public void eliminarMascota(String idMas) {
-        ArrayList<MascotaDTO> lista = listar();
+        List<MascotaDTO> lista = listar();
 
         MascotaDTO encontrada = null;
         for (MascotaDTO m : lista) {

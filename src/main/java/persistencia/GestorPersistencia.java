@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -30,7 +31,7 @@ public class GestorPersistencia {
         return instancia;
     }
 
-    public <T extends Serializable> void guardarLista(String ruta, ArrayList<T> lista) {
+    public <T extends Serializable> void guardarLista(String ruta, List<T> lista) {
         try {
             //crea archivo
             File archivo = new File(ruta);
@@ -44,7 +45,7 @@ public class GestorPersistencia {
 
     }
 
-    public <T extends Serializable> ArrayList<T> cargarLista(String ruta) {
+    public <T extends Serializable> List<T> cargarLista(String ruta) {
         File archivo = new File(ruta);
         if (!archivo.exists()) {
             return new ArrayList<>();
@@ -53,7 +54,7 @@ public class GestorPersistencia {
         }
 
                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ruta))) {
-            return (ArrayList<T>) ois.readObject();
+            return (List<T>) ois.readObject();
                } catch (EOFException e) { //retorna lista vacia
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("❌ Error al leer datos: " + e.getMessage());

@@ -7,6 +7,7 @@ package controladores;
 import dao.PropietarioDAO;
 import dto.PropietarioDTO;
 import java.util.ArrayList;
+import java.util.List;
 import modelo.Propietario;
 
 /**
@@ -54,7 +55,7 @@ public class PropietarioControlador {
     }
 
     // Listar todos los propietarios
-    public ArrayList<PropietarioDTO> obtenerPropietarios() {
+    public List<PropietarioDTO> obtenerPropietarios() {
         return dao.listar();
     }
 

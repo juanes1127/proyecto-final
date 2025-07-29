@@ -17,6 +17,7 @@ import vistas.VentanaMenu;
 import controladores.MascotaControlador;
 import dto.PropietarioDTO;
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  *
@@ -57,7 +58,7 @@ private void cargarListaMascotas() {
     DefaultTableModel modelo = (DefaultTableModel) tblMascota.getModel();
     modelo.setRowCount(0); // Limpiar tabla antes de cargar
 
-    ArrayList<MascotaDTO> mascotas = controladorMascota.obtenerMascotas();
+    List<MascotaDTO> mascotas = controladorMascota.obtenerMascotas();
 
     for (MascotaDTO mascota : mascotas) {
         modelo.addRow(new Object[]{
@@ -73,7 +74,7 @@ private void cargarListaPropietarios() {
     DefaultTableModel modelo = (DefaultTableModel) tablaProp.getModel();
     modelo.setRowCount(0); // Limpiar tabla
 
-    ArrayList<PropietarioDTO> propietarios = controladorPropietario.obtenerPropietarios();
+    List<PropietarioDTO> propietarios = controladorPropietario.obtenerPropietarios();
 
     for (PropietarioDTO p : propietarios) {
         modelo.addRow(new Object[]{
@@ -779,6 +780,22 @@ cargarListaMascotas();
         JOptionPane.showMessageDialog(null, "Por favor complete todos los campos.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
         return;
     }
+           if (!edad.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "La edad debe contener solo números.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (!documento.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El documento debe contener solo números.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+     if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+") || !especie.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+        JOptionPane.showMessageDialog(this, "El nombre y especie debe contener solo letras.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+       
             PropietarioDTO exito = controladorPropietario.buscarPropietarioPorDocumento(documento);
            
             if (exito == null) {
@@ -814,7 +831,22 @@ cargarListaMascotas();
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+          if (!documento.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El documento debe contener solo números.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
+    if (!telefono.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El teléfono debe contener solo números.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Validar que el nombre solo contenga letras (y espacios opcionalmente)
+    if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+        JOptionPane.showMessageDialog(this, "El nombre debe contener solo letras.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
         PropietarioDTO nuevo = new PropietarioDTO(documento, telefono, nombre);
         boolean exito = controladorPropietario.registrarPropietario(nuevo);
 
@@ -876,16 +908,123 @@ cargarListaPropietarios();
     }//GEN-LAST:event_btnEliminar1ActionPerformed
 
     private void btnBuscarPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPropActionPerformed
-        // TODO add your handling code here:
+
+
+ String documento = txtDocP.getText().trim();
+
+    if (documento.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Ingrese un documento para buscar.", "Campo vacío", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    dto.PropietarioDTO prop = controladorPropietario.buscarPropietarioPorDocumento(documento);
+
+    if (prop != null) {
+        DefaultTableModel model = (DefaultTableModel) tablaProp.getModel();
+        model.setRowCount(0); 
+
+        // Muestra solo la mascota encontrada
+        model.addRow(new Object[]{
+            prop.getDocumento(),
+            prop.getNombre(),
+            prop.getTelefono(),
+       
+        });
+        limpiarCamposPro();
+
+    } else {
+        JOptionPane.showMessageDialog(this, "No se encontró ningun propietario con ese documento.", "No encontrado", JOptionPane.INFORMATION_MESSAGE);
+    }
         
     }//GEN-LAST:event_btnBuscarPropActionPerformed
 
     private void btnEditarPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPropActionPerformed
-        // TODO add your handling code here:
+   try {
+        int filaSeleccionada = tablaProp.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un Propietario de la tabla para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Obtenemos el ID y documento directamente desde la tabla (NO SE MODIFICAN)
+        String documento = tablaProp.getValueAt(filaSeleccionada, 0).toString(); // ID en columna 0
+        
+        // Leemos los campos editables
+        String nombre = txtNomP.getText();
+        String telefono = txtTelP.getText();
+        // Validaciones
+        if (nombre.isEmpty() || telefono.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor completa nombre, telefono.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+    if (!telefono.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El teléfono debe contener solo números.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Validar que el nombre solo contenga letras (y espacios opcionalmente)
+    if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+        JOptionPane.showMessageDialog(this, "El nombre debe contener solo letras.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+        // Creamos objeto actualizado (respetando ID y documento original)
+        PropietarioDTO propActualizado = new PropietarioDTO(documento, telefono, nombre);
+        
+        boolean editado = controladorPropietario.editarPropietario(documento, propActualizado);
+
+        if (editado) {
+            JOptionPane.showMessageDialog(this, "Propietario editada correctamente.");
+            cargarListaPropietarios(); 
+            limpiarCamposPro();
+         } else {
+            JOptionPane.showMessageDialog(this, "No se pudo editar el Propietario.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error al editar el Propietario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     }//GEN-LAST:event_btnEditarPropActionPerformed
 
     private void btnEliminarPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPropActionPerformed
-        // TODO add your handling code here:
+ 
+   try {
+        int filaSeleccionada = tablaProp.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un Propietario para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+       
+        String codigo = tablaProp.getValueAt(filaSeleccionada, 0).toString();
+
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de que deseas eliminar esta mascota?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+        
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            boolean fueEliminada = controladorPropietario.eliminarPropietario(codigo);
+
+            if (fueEliminada) {
+                JOptionPane.showMessageDialog(this, "Propietario eliminada correctamente.");
+                cargarListaPropietarios(); 
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar el Propietario.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error al eliminar Propietario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+
+
     }//GEN-LAST:event_btnEliminarPropActionPerformed
 
     /**
