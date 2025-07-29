@@ -11,11 +11,13 @@ import vistas.VentanaRegistro;
 public class VentanaMenu extends javax.swing.JFrame {
 
     private VentanaRegistro ventanaRegistro;
+    private VentanaServicios ventanaServicios;
     /**
      * Creates new form VentanaRegistro
      */
     public VentanaMenu() {
         this.ventanaRegistro = new VentanaRegistro(this);
+        this.ventanaServicios = new VentanaServicios(this);
         initComponents();
          setLocationRelativeTo(this);
         setLayout(new BorderLayout());
@@ -178,8 +180,9 @@ public class VentanaMenu extends javax.swing.JFrame {
 
     private void btnServiciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServiciosActionPerformed
         // TODO add your handling code here:
-        new VentanaServicios() ;  
-        dispose() ; 
+       this.setVisible(false);
+        ventanaServicios.setVisible(true);
+        
     }//GEN-LAST:event_btnServiciosActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

@@ -9,19 +9,23 @@ import java.awt.event.MouseEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import vistas.VentanaMenu;
 
 /**
  *
  * @author Juanes Cardona
  */
 public class VentanaServicios extends javax.swing.JFrame {
+    private VentanaMenu ventanaMenu;
 
     /**
      * Creates new form VentanaServicios
      */
-    public VentanaServicios() {
+    public VentanaServicios(VentanaMenu ventanaMenu) {
+        this.ventanaMenu = ventanaMenu;
         initComponents();
         setVisible(true);
+        setVisible(false);
         
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Servicios");
     DefaultMutableTreeNode medicina = new DefaultMutableTreeNode("Consulta General");
@@ -150,6 +154,8 @@ public class VentanaServicios extends javax.swing.JFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
+         this.setVisible(false);
+        ventanaMenu.setVisible(true);
     }//GEN-LAST:event_btnMenuActionPerformed
 
     /**
@@ -182,7 +188,7 @@ public class VentanaServicios extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaServicios().setVisible(true);
+                
             }
         });
     }
